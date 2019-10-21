@@ -11,6 +11,7 @@
         border-radius: 5px;
         padding: 5px;
         margin-bottom: 18px;
+        background-color: #fff;
     }
     .chartLabel{
         font-size: 1.2em;
@@ -39,12 +40,12 @@
         margin: 0 0 5px 10px;
     }
     #boxStatsLeft{
-        color: black;
-        background-color: #cccccc;
+        color: #fff;
+        background-color: #233548;
     }
     #boxStatsRight{
-		color: black;
-        background-color: #cccccc;
+        color: #fff;
+        background-color: #233548;
     }
     .boxStats{
         color: white;
@@ -85,6 +86,23 @@
     #tooltip.hidden {
         opacity: 0;
     }
+
+    div.boxStatsList a{
+        color: #fff;
+        text-decoration: none;
+    }
+
+    div.boxStatsList a:hover{
+        color: #fff;
+        text-decoration: underline;
+        font-weight: bold;
+    }
+
+    #bottomChartsstaker .chartWrapper {
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+
 </style>
 
 <div id="topCharts">
@@ -141,7 +159,7 @@
 
 			{{ for(var b in it.stats.pools[pool].pending.blocks) { }}
 			{{ var block = it.stats.pools[pool].pending.blocks[b].split(":"); }}
-				<div style="margin-bottom: 9px; background-color: #eeeeee; min-width:600px;"><i class="fa fa-bars"></i>
+				<div style="margin-bottom: 9px; background-color: #364C65; min-width:600px;"><i class="fa fa-bars"></i>
 					<small>Block:</small>
 					{{if (String(it.stats.pools[pool].name).startsWith("zcash")) { }}
 						<a href="https://explorer.zcha.in/blocks/{{=block[0]}}" target="_blank">{{=block[2]}}</a>
