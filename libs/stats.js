@@ -168,6 +168,7 @@ module.exports = function(logger, portalConfig, poolConfigs){
             pools: {}
         };
         for (var pool in stats.pools){
+            if (poolConfigs[pool] !== undefined && poolConfigs[pool].enabled) // we should add only active coins stats (TODO: test)
             data.pools[pool] = {
                 hashrate: stats.pools[pool].hashrate,
                 workerCount: stats.pools[pool].workerCount,
@@ -386,7 +387,7 @@ module.exports = function(logger, portalConfig, poolConfigs){
             ];
 
             var commandsPerCoin = redisCommandTemplates.length;
-
+            
             client.coins.map(function(coin){
                 redisCommandTemplates.map(function(t){
                     var clonedTemplates = t.slice(0);
