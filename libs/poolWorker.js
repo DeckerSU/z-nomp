@@ -71,11 +71,12 @@ module.exports = function(logger){
 
                 if (newPool) {
                     oldPool.relinquishMiners(
-                        function (miner, cback) { 
+                        function (miner, cback) { // filterFn
+                            // logger.debug(logSystem, logComponent, logSubCat, 'filterFn: [' + miner.client.socket.remoteAddress + ':' + miner.client.socket.remotePort + ' -> ' + miner.client.socket.localAddress + ':' + miner.client.socket.localPort + ']');
                             // relinquish miners that are attached to one of the "Auto-switch" ports and leave the others there.
-                            cback(proxyPorts.indexOf(miner.client.socket.localPort.toString()) !== -1)
+                            cback(null, proxyPorts.indexOf(miner.client.socket.localPort.toString()) !== -1)
                         }, 
-                        function (clients) {
+                        function (clients) { // resultCback
                             newPool.attachMiners(clients);
                         }
                     );
@@ -179,10 +180,14 @@ module.exports = function(logger){
             if (isValidShare) {
                 if(data.shareDiff > 1000000000) {
                     logger.debug(logSystem, logComponent, logSubCat, 'Share was found with diff higher than 1.000.000.000!');
+                } else if(data.shareDiff > 100000000) {
+                    logger.debug(logSystem, logComponent, logSubCat, 'Share was found with diff higher than 100.000.000!');
+                } else if(data.shareDiff > 10000000) {
+                    logger.debug(logSystem, logComponent, logSubCat, 'Share was found with diff higher than 10.000.000!');
                 } else if(data.shareDiff > 1000000) {
                     logger.debug(logSystem, logComponent, logSubCat, 'Share was found with diff higher than 1.000.000!');
                 }
-                //logger.debug(logSystem, logComponent, logSubCat, 'Share accepted at diff ' + data.difficulty + '/' + data.shareDiff + ' by ' + data.worker + ' [' + data.ip + ']' );
+                //logger.debug(logSystem, logComponent, logSubCat, 'Share accepted at diff ' + data.difficulty + '/' + data.shareDiff + ' (' + data.blockDiff +')' + ' by ' + data.worker + ' [' + data.ip + ']' );
             } else if (!isValidShare) {
                 logger.debug(logSystem, logComponent, logSubCat, 'Share rejected: ' + shareData);
             }
