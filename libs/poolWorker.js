@@ -70,16 +70,20 @@ module.exports = function(logger){
                 logger.debug(logSystem, logComponent, logSubCat, 'Proxy message for ' + algo + ' from ' + oldCoin + ' to ' + newCoin);
 
                 if (newPool) {
-                    oldPool.relinquishMiners(
-                        function (miner, cback) { // filterFn
-                            // logger.debug(logSystem, logComponent, logSubCat, 'filterFn: [' + miner.client.socket.remoteAddress + ':' + miner.client.socket.remotePort + ' -> ' + miner.client.socket.localAddress + ':' + miner.client.socket.localPort + ']');
-                            // relinquish miners that are attached to one of the "Auto-switch" ports and leave the others there.
-                            cback(null, proxyPorts.indexOf(miner.client.socket.localPort.toString()) !== -1)
-                        }, 
-                        function (clients) { // resultCback
-                            newPool.attachMiners(clients);
-                        }
-                    );
+                    if (oldPool) {
+                        oldPool.relinquishMiners(
+                            function (miner, cback) { // filterFn
+                                // logger.debug(logSystem, logComponent, logSubCat, 'filterFn: [' + miner.client.socket.remoteAddress + ':' + miner.client.socket.remotePort + ' -> ' + miner.client.socket.localAddress + ':' + miner.client.socket.localPort + ']');
+                                // relinquish miners that are attached to one of the "Auto-switch" ports and leave the others there.
+                                cback(null, proxyPorts.indexOf(miner.client.socket.localPort.toString()) !== -1)
+                            },
+                            function (clients) { // resultCback
+                                newPool.attachMiners(clients);
+                            }
+                        );
+                    } else
+                        logger.error(logSystem, logComponent, logSubCat, 'Switch message from coin that is not recognized: ' + oldCoin);
+
                     proxySwitch[switchName].currentPool = newCoin;
 
                     redisClient.hset('proxyState', algo, newCoin, function(error, obj) {
