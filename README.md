@@ -75,13 +75,15 @@ a good pool operator. For starters be sure to read:
 Clone the repository and run `npm update` for all the dependencies to be installed:
 
 ```bash
-sudo apt-get install build-essential libsodium-dev npm
+sudo apt install libboost-all-dev # also good to have all komodod dependencies installed
+sudo apt install build-essential libsodium-dev npm redis-server
 sudo npm install n -g
-sudo n stable
-git clone https://github.com/joshuayabut/node-open-mining-portal.git z-nomp
+sudo n v8.11.2
+git clone https://github.com/DeckerSU/z-nomp
 cd z-nomp
 npm update
 npm install
+sudo systemctl restart redis-server # sudo service redis-server restart
 ```
 
 ##### Pool config
